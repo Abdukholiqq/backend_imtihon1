@@ -109,18 +109,20 @@ if (req.query.model) {
     }
 }
 
-exports.putProducts =  (req,res) =>{
-  const allProducts = read("products")
-  const product_id = req.url.split("/")[0];
-  req.on("data", (chunk)=>{
-    const {product_id, product_name,  price} =JSON.parse(chunk)
-    const newProducts = allProducts.find((e)=>e.product_id == product_id)
-
-    newProducts.product_id = product_id ? product_id: newProducts.product_id;
-    newProducts.product_name = product_name ? product_name : newProducts.product_name;
-    newProducts.price = price ? price : newProducts.price;
-
-write("products" , [...allProducts , newProducts])
-  })
-  return res.end(JSON.stringify(read("products")))
+exports.putProducts = async (req,res) =>{ 
+  try {
+      const { product_id, product_name } = await req.body;
+      const putCategories = read("products");
+      let newCategory = putCategories.filter(
+        (e) => e.product_id != product_id
+      );
+      newCategory.push({ product_id, product_name });
+      newCategory.product_name = product_name || newCategory.product_name;
+      write("categories", newCategory);
+      res.json(200, { status: 200, success: true });
+    } catch (error) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.json(400, { status: 400, message: error.message });
+    }
+  
 }

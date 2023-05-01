@@ -51,3 +51,20 @@ exports.deleteSubCategories = async (req, res) => {
      res.end(JSON.stringify({ status: 500, message: error.message }));
    } 
 };
+exports.putSubCategories = async (req,res)=>{
+  try {
+      const { sub_category_id, category_name } = await req.body;
+      const putCategories = read("subCategories");
+      let newSubCategory = putCategories.filter(
+        (e) => e.sub_category_id != sub_category_id
+      );
+      newSubCategory.push({ sub_category_id, category_name });
+      newSubCategory.category_name = category_name || newSubCategory.category_name;
+      write("categories", newSubCategory);
+      res.json(200, { status: 200, success: true });
+    } catch (error) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.json(400, { status: 400, message: error.message });
+    }
+  
+}
