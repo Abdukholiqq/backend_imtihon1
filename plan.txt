@@ -1,0 +1,7 @@
+PUT  qilinmagan
+queryni /?subcategory_id&model=modelName ni qilish kerak
+
+Bajarildi
+/subcategory POST qilishda kamchilik bor  ++
+get qilib olishda /category  bilan /subcategory ga productsni qo'shish ketak   ++
+delete da muammo bor   ++ 
